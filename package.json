@@ -1,0 +1,29 @@
+{
+  "name": "openjar-cli",
+  "version": "3.0.0",
+  "description": "CLI tool for searching the local Maven/Gradle artifact index",
+  "type": "module",
+  "bin": {
+    "openjar-cli": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc && mkdir .\\dist\\lib\\ && copy .\\lib\\cfr-0.152.jar .\\dist\\lib\\",
+    "test": "vitest --run"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.10.0",
+    "commander": "^14.0.3",
+    "semver": "^7.8.0",
+    "xml2js": "^0.6.2",
+    "yauzl": "^3.3.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^25.7.0",
+    "@types/semver": "^7.7.1",
+    "@types/xml2js": "^0.4.14",
+    "@types/yauzl": "^2.10.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  }
+}
