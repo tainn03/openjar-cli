@@ -4,7 +4,18 @@
 
 A command-line tool for querying your local Maven/Gradle artifact index directly from the terminal — no MCP client required.
 
-**Key Use Case**: When AI tools in the terminal (claude, gemini-cli, copilot-cli, codex, etc.) need to look up Java classes, method signatures, or source code from your local dependencies, they can call `openjar-cli` directly instead of requiring an MCP server.
+## Use Cases
+
+In an agentic workflow—where autonomous AI agents like Claude Code, GitHub Copilot, Codex, or OpenCode perform multi-step coding tasks—the **openjar CLI** acts as a critical "sensory" tool. It allows agents to observe and reason about the external libraries they are using without human intervention.
+
+Usecase | Description
+--|--
+**Autonomous API Discovery & Usage** | When an agent is asked to implement a feature using an unfamiliar library (e.g., a specific internal enterprise SDK), it can use `openjar-cli` to instantly read the class definitions. This allows the agent to find the correct method overloads and required parameters without needing pre-existing documentation.
+**Self-Healing Debugging** | If a Maven or Gradle build fails with a stack trace originating from a library (e.g., a `NullPointerException` inside a JAR), the agent can call `openjar-cli` to inspect the failing line of code in that library. This enables the agent to understand if it passed the wrong data or if it needs to implement a workaround.
+**Security & Compliance Auditing** | Agents can be tasked to scan a project's local cache for specific "sink" methods or vulnerable classes (like the infamous `JndiLookup` in Log4j) across all dependencies. `openjar-cli` allows the agent to decompile and grep through these binaries programmatically.
+**Library Version Comparison** | An agent tasked with upgrading a dependency can use `openjar-cli` to compare the decompiled source of a specific class across two different JAR versions in the cache. This helps the agent identify breaking changes or "hidden" logic shifts that are not explicitly mentioned in a changelog.
+**IDE-less Remote Development** | In workflows where agents operate directly on remote staging servers or CI/CD runners (where no IDE is present), `openjar-cli` serves as the agent's "eyes" into the classpath environment.
+
 
 ## Installation
 
