@@ -9,17 +9,11 @@ A command-line tool for querying your local Maven/Gradle artifact index directly
 ## Installation
 
 ```bash
-npm install -g openjar-cli
-```
-
-## Skills
-
-```bash
 # Install the CLI
 npm install -g openjar-cli
 
 # Install the skill
-npx skills add tainn03/openjar-cli -g -y
+npx skills add tainn03/openjar-cli -g
 ```
 
 The skill guides AI tools to call `openjar-cli` when they need to look up Java classes, artifacts, or source code from your local Maven/Gradle dependencies.
