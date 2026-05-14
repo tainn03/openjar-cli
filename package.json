@@ -1,6 +1,6 @@
 {
   "name": "openjar-cli",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "CLI tool for searching the local Maven/Gradle artifact index",
   "type": "module",
   "bin": {
