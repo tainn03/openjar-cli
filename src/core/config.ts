@@ -17,6 +17,7 @@ export class Config {
   public normalizedIncludedPackages: string[] = [];
   public cfrPath: string | null = null;
   public versionResolutionStrategy: VersionStrategy = 'semver';
+  private verboseLogging: boolean = false;
 
   private constructor() { }
 
@@ -34,6 +35,7 @@ export class Config {
   }
 
   private async load() {
+    this.verboseLogging = process.env.OPENJAR_CLI_VERBOSE === '1';
     let repoPath: string | null = null;
 
     // 1. Check environment variable
@@ -124,20 +126,26 @@ export class Config {
 
     if (this.cfrPath && !(await this.fileExists(this.cfrPath))) {
       try {
-        console.error(`CFR jar not found at ${this.cfrPath}, attempting to download...`);
+        if (this.verboseLogging) {
+          console.error(`CFR jar not found at ${this.cfrPath}, attempting to download...`);
+        }
         await this.downloadCfr(this.cfrPath);
-        console.error(`Successfully downloaded CFR jar to ${this.cfrPath}`);
+        if (this.verboseLogging) {
+          console.error(`Successfully downloaded CFR jar to ${this.cfrPath}`);
+        }
       } catch (e: any) {
         console.error(`Failed to download CFR jar: ${e.message}`);
       }
     }
 
-    // Log to stderr so it doesn't interfere with MCP protocol on stdout
-    console.error(`Using local repository: ${this.localRepository}`);
-    console.error(`Using Java binary: ${this.javaBinary}`);
-    console.error(`Included packages: ${JSON.stringify(this.includedPackages)}`);
-    if (this.cfrPath) {
-      console.error(`Using CFR jar: ${this.cfrPath}`);
+    if (this.verboseLogging) {
+      // Log to stderr so it doesn't interfere with MCP protocol on stdout
+      console.error(`Using local repository: ${this.localRepository}`);
+      console.error(`Using Java binary: ${this.javaBinary}`);
+      console.error(`Included packages: ${JSON.stringify(this.includedPackages)}`);
+      if (this.cfrPath) {
+        console.error(`Using CFR jar: ${this.cfrPath}`);
+      }
     }
   }
 
@@ -210,7 +218,9 @@ export class Config {
         return result.settings.localRepository[0];
       }
     } catch (error) {
-      console.error(`Failed to parse ${filePath}:`, error);
+      if (this.verboseLogging) {
+        console.error(`Failed to parse ${filePath}:`, error);
+      }
     }
     return null;
   }

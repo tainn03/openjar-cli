@@ -128,7 +128,6 @@ async function resolveOne(
           usedDecompilation = true;
         }
       } catch (e: any) {
-        console.error(`Decompilation/MainJar access failed: ${e.message}`);
         lastError = e.message;
       }
     }

@@ -16,6 +16,9 @@ export interface ClassDetail {
 }
 
 export class SourceParser {
+  private static isVerbose(): boolean {
+    return process.env.OPENJAR_CLI_VERBOSE === '1';
+  }
   
   public static async getClassDetail(
     jarPath: string, 
@@ -28,7 +31,8 @@ export class SourceParser {
     
     // className: com.example.MyClass
     // internalPath: com/example/MyClass.java
-    const basePath = className.replace(/\./g, '/');
+    const sourceClassName = className.split('$')[0];
+    const basePath = sourceClassName.replace(/\./g, '/');
     const candidates = [
         basePath + '.java',
         basePath + '.kt'
@@ -45,7 +49,12 @@ export class SourceParser {
 
             zipfile.readEntry();
             zipfile.on('entry', (entry) => {
-                if (candidates.includes(entry.fileName)) {
+                const normalizedEntryPath = entry.fileName.replace(/\\/g, '/');
+                const isMatch = candidates.some(candidate =>
+                  normalizedEntryPath === candidate || normalizedEntryPath.endsWith('/' + candidate)
+                );
+
+                if (isMatch) {
                     found = true;
                     const language = entry.fileName.endsWith('.kt') ? 'kotlin' : 'java';
                     zipfile.openReadStream(entry, (err, readStream) => {
@@ -104,9 +113,11 @@ export class SourceParser {
           const { stdout, stderr } = await execAsync(cmd);
           
           if (!stdout && stderr) {
-             console.error(`CFR stderr for ${className}:`, stderr);
-             // If stderr has content but stdout is empty, it might be an error
-             throw new Error(`CFR stderr: ${stderr}`);
+             if (SourceParser.isVerbose()) {
+               console.error(`CFR stderr for ${className}:`, stderr);
+             }
+              // If stderr has content but stdout is empty, it might be an error
+              throw new Error(`CFR stderr: ${stderr}`);
           }
           
           if (stdout) {
@@ -119,7 +130,9 @@ export class SourceParser {
               language: 'java'
           };
       } catch (e: any) {
-          console.error(`CFR failed for ${className} in ${jarPath}:`, e.message);
+          if (SourceParser.isVerbose()) {
+            console.error(`CFR failed for ${className} in ${jarPath}:`, e.message);
+          }
           throw e; // Rethrow to let caller handle
       }
   }

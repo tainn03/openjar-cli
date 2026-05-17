@@ -140,6 +140,7 @@ Other environment variables:
 | `INCLUDED_PACKAGES` | Comma-separated package patterns to index | `*` (all) |
 | `MAVEN_INDEXER_CFR_PATH` | Path to CFR decompiler JAR | bundled |
 | `VERSION_RESOLUTION_STRATEGY` | `semver`, `latest-published`, or `latest-used` | `semver` |
+| `OPENJAR_CLI_VERBOSE` | Set to `1` to enable diagnostic stderr logs | unset |
 
 ## Smart Class Resolution
 
